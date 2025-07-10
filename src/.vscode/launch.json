@@ -4,17 +4,19 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "type": "fgldb-dap",
             "request": "launch",
             "name": "(4gl) Launch",
-            "program": "${workspaceFolder}/simpleinput",
+            "program": "${workspaceFolder}/testfiledlg",
             "args": [""],
             "stopAtEntry": false,
             "externalConsole": false,
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "4gl: make all"
+            "preLaunchTask": "4gl: make all",
+            "env":{
+                "FGLSERVER":"localhost:0"
+            }
         }
     ]
 }
