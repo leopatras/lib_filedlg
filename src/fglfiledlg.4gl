@@ -102,7 +102,7 @@ FUNCTION _filedlg_doDlg(dlgtype,title,r)
   DEFINE doContinue, i INT
   DEFINE cb ui.ComboBox
 
-  OPEN WINDOW _filedlg WITH FORM "filedlg"
+  OPEN WINDOW _filedlg WITH FORM "fglfiledlg"
        ATTRIBUTES(STYLE='dialog',TEXT=title)
 
   CALL fgl_settitle(title)
