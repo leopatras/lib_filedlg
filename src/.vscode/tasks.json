@@ -1,0 +1,91 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "genero-fgl",
+			"label": "4gl: build all 4gl files",
+			"command": "fglcomp",
+			"args": [
+				"-M",
+				"--make",
+				"-Wall",
+				"-Wno-stdsql",
+				"-k",
+				"*.4gl"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$fglcomp"
+			],
+			"group": "build",
+			"detail": "fglcomp -M --make -Wall -Wno-stdsql -k *.4gl"
+		},
+		{
+			"type": "genero-fgl",
+			"label": "4gl: make all",
+			"command": "make",
+			"args": [],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$fglcomp"
+			],
+			"group": "build",
+			"detail": "make "
+		},
+		{
+			"type": "genero-fgl",
+			"label": "4gl: build all 4gl files",
+			"command": "fglcomp",
+			"args": [
+				"-M",
+				"--make",
+				"-Wall",
+				"-Wno-stdsql",
+				"-k",
+				"*.4gl"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$fglcomp"
+			],
+			"group": "build",
+			"detail": "fglcomp -M --make -Wall -Wno-stdsql -k *.4gl"
+		},
+		{
+			"type": "genero-fgl",
+			"label": "per: build all per files",
+			"command": "fglform",
+			"args": [
+				"-M",
+				"--make",
+				"*.per"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$fglcomp"
+			],
+			"group": "build",
+			"detail": "fglform -M --make *.per"
+		},
+		{
+			"label": "Build all Genero",
+			"dependsOn": [
+				"4gl: build all 4gl files",
+				"per: build all per files"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
