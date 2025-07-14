@@ -16,26 +16,27 @@ ACTION DEFAULTS
   ACTION mkdir(TEXT="Make dir",COMMENT="Creates a new directory")
 END
 LAYOUT
-TABLE(DOUBLECLICK=accept)
+GRID
 {
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
-[a                    ][b                             ]
+<TABLE                          >
+ [a          ]  [b           ]
+ [a          ]  [b           ]
+ [a          ]  [b           ]
+
+<GROUP OPTIONS                           >
+[btn_close]       [btn_delete]
+[btn_view]        [btn_delall]
+[btn_showpath]    [btn_mkdir] 
 }
 END
-END
-ATTRIBUTES
-a=FORMONLY.a,SCROLL;
-b=FORMONLY.b,SCROLL;
+   ATTRIBUTES 
+   BUTTON btn_close : close;
+   BUTTON btn_delete : delete;
+   BUTTON btn_view : view;
+   BUTTON btn_delall : delall;
+   BUTTON btn_showpath : showpath;
+   BUTTON btn_mkdir : mkdir; 
+a=FORMONLY.a;
+b=FORMONLY.b;
 INSTRUCTIONS
 SCREEN RECORD parr(a,b);

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Form name="text_view" build="5.01.02" width="9" height="4">
+  <Grid width="9" height="4">
+    <FormField name="formonly.te" colName="te" fieldId="0" sqlTabName="formonly" tabIndex="1">
+      <TextEdit width="7" height="4" stretch="both" wantReturns="1" scroll="1" posY="0" posX="1" gridWidth="7" gridHeight="4"/>
+    </FormField>
+  </Grid>
+  <RecordView tabName="formonly">
+    <Link colName="te" fieldIdRef="0"/>
+  </RecordView>
+</Form>
