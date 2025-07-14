@@ -15,7 +15,8 @@
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "4gl: make all",
             "env":{
-                "FGLSERVER":"localhost:0"
+                "FGLSERVER":"192.168.7.135:0"
+            
             }
         }
     ]
