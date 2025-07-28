@@ -18,25 +18,25 @@ END
 LAYOUT
 GRID
 {
-<TABLE                          >
- [a          ]  [b           ]
- [a          ]  [b           ]
- [a          ]  [b           ]
+<TABLE                                 >
+ [a                 ]  [b             ]
+ [a                 ]  [b             ]
+ [a                 ]  [b             ]
 
-<GROUP OPTIONS                           >
-[btn_close]       [btn_delete]
-[btn_view]        [btn_delall]
-[btn_showpath]    [btn_mkdir] 
+<GROUP OPTIONS                         >
+[btn_close]    [btn_delete]
+[btn_view ]    [btn_delall]
+[btn_showp]    [btn_mkdir ] 
 }
 END
    ATTRIBUTES 
-   BUTTON btn_close : close;
-   BUTTON btn_delete : delete;
-   BUTTON btn_view : view;
-   BUTTON btn_delall : delall;
-   BUTTON btn_showpath : showpath;
-   BUTTON btn_mkdir : mkdir; 
-a=FORMONLY.a;
-b=FORMONLY.b;
+   BUTTON btn_close : close, STRETCH=X;
+   BUTTON btn_delete : delete, STRETCH=X;
+   BUTTON btn_view : view, STRETCH=X;
+   BUTTON btn_delall : delall, STRETCH=X;
+   BUTTON btn_showp : showpath, STRETCH=X;
+   BUTTON btn_mkdir : mkdir, STRETCH=X;
+a=FORMONLY.a, STRETCH=X;
+b=FORMONLY.b, STRETCH=X;
 INSTRUCTIONS
 SCREEN RECORD parr(a,b);
