@@ -7,47 +7,116 @@
 # samples are accurate and suitable for your purposes. Their inclusion is
 # purely for information purposes only.
 
+# Property of Four Js*
+# (c) Copyright Four Js 1995, 2025. All Rights Reserved.
+# * Trademark of Four Js Development Tools Europe Ltd
+#   in the United States and elsewhere
+#
+# Four Js and its suppliers do not warrant or guarantee that these
+# samples are accurate and suitable for your purposes. Their inclusion is
+# purely for information purposes only.
+ 
 ACTION DEFAULTS
   ACTION del (TEXT="Delete",ACCELERATOR=Delete)
 END
-LAYOUT(text="",style="dialog3")
-GRID
-{
-  [lfd |path                                                    |bu ]
-   <T t1                                                           >
-    [ei  |entry              |esize      |emodt             |etype ]
-    [ei  |entry              |esize      |emodt             |etype ]
-    [ei  |entry              |esize      |emodt             |etype ]
-    [ei  |entry              |esize      |emodt             |etype ]
-    [ei  |entry              |esize      |emodt             |etype ]
-    [ei  |entry              |esize      |emodt             |etype ]
-    [ei  |entry              |esize      |emodt             |etype ]
-    [ei  |entry              |esize      |emodt             |etype ]
+ 
+LAYOUT(text="",style="dialog3", MINWIDTH = 50)
 
-  [lfn |file                                               |    open]
-  [lft |ftype                                              |    canc]
+HBOX (splitter)  
+TREE mytree (PARENTIDCOLUMN=parentid, IDCOLUMN=id,
+              EXPANDEDCOLUMN=expanded, ISNODECOLUMN=isdir, HIDDEN@SMALL)
+{
+  Name                      
+ [     name      ]
+ [     name      ]
+ [     name      ]
+ [     name      ]
+ [     name      ]
+ [     name      ]
+ [     name      ]
 }
 END
 
-ATTRIBUTES
-LABEL lfd:text="Directory:";
-path = FORMONLY.currpath,SCROLL,comment="Displays the current directory";
-BUTTON bu : move_up,image="uplevel",comment="Moves one directory up";
-
-IMAGE ei = FORMONLY.eimage;
-entry = FORMONLY.entry, TITLE="Name";
-esize = FORMONLY.esize, TITLE="Size", JUSTIFY = RIGHT;
-emodt = FORMONLY.emodt, TITLE="Time";
-etype = FORMONLY.etype, TITLE="Type";
-
-LABEL lfn:text="File:";
-LABEL lft:text="Files of type:";
-file = FORMONLY.filename,SCROLL,COMMENT="Input the wanted file name";
-COMBOBOX ftype = FORMONLY.ftype,SCROLL,sizepolicy=DYNAMIC,NOT NULL;
-BUTTON open:accept,text="Open";
-BUTTON canc:cancel,text="Cancel";
+ VBOX -- (ORIENTATION@SMALL = VERTICAL)   --big vbox for all subelements
+   HBOX  --(ORIENTATION@SMALL = VERTICAL)          --local hbox 1 start
+    GRID
+    {
+    [lfd]        
+    [path                         ][bu]
+    }
+   END -- END of grid
+ END --local hbox 1 end
+ 
+HBOX --(ORIENTATION@SMALL = VERTICAL)
+--GRID
+TABLE t1 --table for this table below instead of grid
+(STRETCH = BOTH, FLIPPED@SMALL, HEIGHT = 15)
+{
+ 
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+[ei  |entry  |esize    |emodt   |etype ]
+}
+END --end table
 END
+ 
+HBOX  --(ORIENTATION@SMALL = VERTICAL)    --HBOX 2
+GRID
+  {
+   [l                    ]
+   [f                    ]
+   [t                    ]
+   [e                    ]
+   [o        ] [c        ]
+   }
+END --end grid 1
+END --END HBOX 2
+END -- END LARGE VBOX
+END --END LAYOUT
+ 
+ 
+ATTRIBUTES
+EDIT name = FORMONLY.name, IMAGECOLUMN=image, stretch = X;
+PHANTOM FORMONLY.image;
+PHANTOM FORMONLY.parentid;
+PHANTOM FORMONLY.id;
+PHANTOM FORMONLY.expanded;
+PHANTOM FORMONLY.isdir;
+PHANTOM FORMONLY.hasChildren;
 
+ 
+ 
+ 
+LABEL lfd:text="Directory:", SIZEPOLICY = DYNAMIC;
+path = FORMONLY.currpath,SCROLL,comment="Displays the current directory", STRETCH = X;
+BUTTON bu : move_up,image="uplevel",comment="Moves one directory up", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X, STRETCH@LARGE=NONE;
+ 
+IMAGE ei = FORMONLY.eimage, STRETCH = X, SIZEPOLICY = DYNAMIC, HIDDEN@SMALL;
+entry = FORMONLY.entry, TITLE="Name", SIZEPOLICY = DYNAMIC, STRETCH = X;
+esize = FORMONLY.esize, TITLE="Size", JUSTIFY = RIGHT, SIZEPOLICY = DYNAMIC, STRETCH = X, HIDDEN@SMALL;
+emodt = FORMONLY.emodt, TITLE="Time", HIDDEN@SMALL, SIZEPOLICY = DYNAMIC, STRETCH = X, HIDDEN@SMALL;
+etype = FORMONLY.etype, TITLE="Type", STRETCH = X, HIDDEN@SMALL;
+ 
+LABEL l:text="File:", SIZEPOLICY = DYNAMIC, STRETCH = X;
+LABEL t:text="Files of type:", SIZEPOLICY = DYNAMIC, STRETCH = X;
+f = FORMONLY.filename,SCROLL,COMMENT="Input the wanted file name", STRETCH = X, SIZEPOLICY = DYNAMIC;
+COMBOBOX e = FORMONLY.ftype,SCROLL,sizepolicy=DYNAMIC,NOT NULL, SIZEPOLICY = DYNAMIC;
+-- BUTTON o:accept,text="Open", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X, STRETCH@LARGE=NONE;
+-- BUTTON c:cancel,text="Cancel", SIZEPOLICY = DYNAMIC, STRETCH = X, STRETCH@SMALL=X, STRETCH@LARGE=NONE;
+BUTTON o:accept,text="Open", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X;
+BUTTON c:cancel,text="Cancel", SIZEPOLICY = DYNAMIC, STRETCH = X, STRETCH@SMALL=X;
+ 
+ 
+END
+ 
 INSTRUCTIONS
 SCREEN RECORD sr(eimage THRU etype);
-
+SCREEN RECORD tr(name, image, parentid, id, expanded, isdir, hasChildren) -- for TREE
+--SCREEN RECORD dirs(name, PARENTIDCOLUMN, ID, hasChildren, expanded);
