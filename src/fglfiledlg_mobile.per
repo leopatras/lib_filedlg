@@ -15,28 +15,31 @@ ACTION DEFAULTS
   ACTION showpath(TEXT="Full path",COMMENT="Shows the complete path of the file")
   ACTION mkdir(TEXT="Make dir",COMMENT="Creates a new directory")
 END
-LAYOUT
+--LAYOUT
+LAYOUT (TEXT = "4gl file browser", STYLE = "main2")
 GRID
 {
-<TABLE                          >
- [a          ]  [b           ]
- [a          ]  [b           ]
- [a          ]  [b           ]
+
+<TABLE                                  >
+[a                  ]  [b               ]
+[a                  ]  [b               ]
+[a                  ]  [b               ]
 
 <GROUP OPTIONS                           >
 [btn_close]       [btn_delete]
-[btn_view]        [btn_delall]
-[btn_showpath]    [btn_mkdir] 
+[btn_view ]       [btn_delall]
+[btn_showp]       [btn_mkdir ] 
 }
 END
    ATTRIBUTES 
-   BUTTON btn_close : close;
-   BUTTON btn_delete : delete;
-   BUTTON btn_view : view;
-   BUTTON btn_delall : delall;
-   BUTTON btn_showpath : showpath;
-   BUTTON btn_mkdir : mkdir; 
-a=FORMONLY.a;
-b=FORMONLY.b;
+   --EDIT a = btn_close, STRETCHMAX = 20 @small, 40 @medium, 60 @large;
+   BUTTON btn_close : close, STRETCH@SMALL=X, STRETCH@LARGE=NONE, STRETCH = X;
+   BUTTON btn_delete : delete, STRETCH@SMALL=X, STRETCH@LARGE=NONE, STRETCH = X;
+   BUTTON btn_view : view,  STRETCH@SMALL=X, STRETCH@LARGE=NONE, STRETCH = X;
+   BUTTON btn_delall : delall,  STRETCH@SMALL=X, STRETCH@LARGE=NONE, STRETCH = X;
+   BUTTON btn_showp : showpath, STRETCH@SMALL=X, STRETCH@LARGE=NONE, STRETCH = X;
+   BUTTON btn_mkdir : mkdir,  STRETCH@SMALL=X, STRETCH@LARGE=NONE, STRETCH = X;
+a=FORMONLY.a, STRETCH = X;
+b=FORMONLY.b, STRETCH = X;
 INSTRUCTIONS
 SCREEN RECORD parr(a,b);

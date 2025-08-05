@@ -7,7 +7,7 @@
 # samples are accurate and suitable for your purposes. Their inclusion is
 # purely for information purposes only.
 
-IMPORT FGL fglfiledlg
+--IMPORT FGL fglfiledlg
 IMPORT FGL fglfiledlg_mobile
 
 MAIN
@@ -19,9 +19,13 @@ MAIN
 
   DISPLAY "Try options in the action panel" AT 5,5
 
-  MENU "File dialog"
 
-      COMMAND "Choose .per"
+  open FORM f from "testfiledlg"
+  DISPLAY form f
+
+  MENU ""  --got rid of the text here ##################################################
+
+      ON ACTION chooseper
           -- get back an existing .per filename
           LET r1.title="Please choose a form"
           LET r1.defaultfilename="filedlg.per"
@@ -33,18 +37,22 @@ MAIN
           LET cname= filedlg_open(r1.*)
           MESSAGE ">>>>chosen file:",cname
 
-      COMMAND "New .per"
+
+      ON ACTION newper
           -- get back a name for a file not existing yet
-          LET r2.title="Please enter a filename for save"
+          LET r2.title="Please enter a filename for saving"
           LET r2.defaultfilename="spong"
           LET r2.types[1].description="All files (*.*)"
           LET r2.types[1].suffixes="*.*"
           LET cname= filedlg_save(r2.*)
           MESSAGE ">>>>new file:",cname
-      COMMAND "browse mobile"
+   
+
+     ON ACTION browsemobile
           CALL fglfiledlg_mobile.browse()
 
-      COMMAND "Quit"
+  
+     ON ACTION quitting 
           EXIT MENU
 
   END MENU

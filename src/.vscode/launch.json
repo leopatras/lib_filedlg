@@ -15,8 +15,22 @@
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "4gl: make all",
             "env":{
-                "FGLSERVER":"192.168.7.135:0"
+             //"FGLSERVER":"192.168.12.50:0"
             
+            }
+        }, {
+            "type": "fgldb-dap",
+            "request": "launch",
+            "name": "(4gl) MobileLaunch",
+            "program": "${workspaceFolder}/testfiledlg",
+            "args": [""],
+            "stopAtEntry": false,
+            "externalConsole": false,
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "4gl: make all",
+            "env":{
+             //"FGLSERVER":"192.168.12.50:0"
+            "FGLSERVER":"phone:0"
             }
         }
     ]
