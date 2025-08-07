@@ -24,7 +24,7 @@ LAYOUT(text="",style="dialog3", MINWIDTH = 50)
 
 HBOX (splitter)  
 TREE mytree (PARENTIDCOLUMN=parentid, IDCOLUMN=id,
-              EXPANDEDCOLUMN=expanded, ISNODECOLUMN=isdir, HIDDEN@SMALL)
+              EXPANDEDCOLUMN=expanded, ISNODECOLUMN=isdir, HIDDEN@SMALL, DOUBLECLICK = NONE)
 {
   Name                      
  [     name      ]
@@ -110,7 +110,7 @@ f = FORMONLY.filename,SCROLL,COMMENT="Input the wanted file name", STRETCH = X, 
 COMBOBOX e = FORMONLY.ftype,SCROLL,sizepolicy=DYNAMIC,NOT NULL, SIZEPOLICY = DYNAMIC;
 -- BUTTON o:accept,text="Open", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X, STRETCH@LARGE=NONE;
 -- BUTTON c:cancel,text="Cancel", SIZEPOLICY = DYNAMIC, STRETCH = X, STRETCH@SMALL=X, STRETCH@LARGE=NONE;
-BUTTON o:accept,text="Open", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X;
+BUTTON o:accept,text="Save", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X;
 BUTTON c:cancel,text="Cancel", SIZEPOLICY = DYNAMIC, STRETCH = X, STRETCH@SMALL=X;
  
  

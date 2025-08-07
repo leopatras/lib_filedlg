@@ -8,8 +8,6 @@
 # purely for information purposes only.
 
 
-
-
 OPTIONS SHORT CIRCUIT
 IMPORT os
 IMPORT FGL fgldialog
@@ -25,11 +23,6 @@ TYPE t_file_entry RECORD
 
 
  DEFINE currpath, path, filename, ftype, dirname, filepath STRING
-
-
-
-
-
 
 
 
@@ -255,6 +248,10 @@ FUNCTION _filedlg_doDlg(dlgtype,title,r)
   OPEN WINDOW _filedlg WITH FORM "fglfiledlg"
        ATTRIBUTE(STYLE='dialog',TEXT=title)
 
+       VAR f = ui.Window.getCurrent().getForm()  
+       
+       CALL f.setElementText ("accept", IIF(dlgtype==C_OPEN, "Open", "Save")) 
+
   CALL fgl_settitle(title)
   CALL fill_tree()
   LET currpath = r.defaultpath
@@ -438,7 +435,6 @@ END FUNCTION
    #+ @return None
    #+ @param root_path The directory path to use as the root node.
    #
-
    FUNCTION refresh_tree_for_path(root_path)
     DEFINE root_path STRING
     CALL tree_arr.clear()
@@ -638,7 +634,12 @@ END FUNCTION
 
 -------------------------- _file helpers ---------------------------------------
 
-
+#+ Extracts the directory portion from a file path.
+#+ Returns current directory "." if no directory path is found.
+#+ @returnType String
+#+ @return The directory path, or "." if filename has no directory component.
+#+ @param filename The full file path from which to extract the directory.
+#
 PRIVATE FUNCTION _file_get_dirname(filename)
   DEFINE filename STRING
   DEFINE dirname STRING
@@ -651,7 +652,12 @@ END FUNCTION
 
 
 
-
+#+ Extracts the file extension from a filename, including the leading dot.
+#+ Returns NULL if the file has no extension.
+#+ @returnType String
+#+ @return The file extension with leading dot (e.g., ".txt"), or NULL if no extension.
+#+ @param filename The filename from which to extract the extension.
+#
 PRIVATE FUNCTION _file_extension(filename)
   DEFINE filename STRING
   DEFINE extension STRING
@@ -664,7 +670,12 @@ END FUNCTION
 
 
 
-
+#+ Deletes a file with user-friendly error reporting.
+#+ Displays an error dialog if the deletion fails.
+#+ @returnType void
+#+ @return None.
+#+ @param filename The full path to the file to delete.
+#
 PRIVATE FUNCTION _file_delete(filename)
   DEFINE filename STRING
   IF NOT os.Path.delete(filename) THEN
