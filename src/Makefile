@@ -14,8 +14,29 @@ MODULES=$(patsubst %.4gl,%.42m,$(wildcard *.4gl))
 FORMS=$(patsubst %.per,%.42f,$(wildcard *.per))
 all:: $(MODULES) $(FORMS)
 
+demo: all
+	fglrun testfiledlg
+
 echo:
 	echo "MODULES:$(MODULES),FORMS:$(FORMS)
+
+gwa.build: all
+	gwabuildtool --app-dir-is-pwd --main-module=testfiledlg --program-dir . -i "*.per"
+
+gwa.run: all gwa.build
+	gwasrv gwa_dist/index.html
+
+gwa_dist.zip: gwa.build
+	rm -f gwa_dist.zip
+	zip -r gwa_dist.zip gwa_dist
+
+#upload to a server location
+SCP_HOST=generomobile.de
+SCP_PATH=Sites/gmi/gwa_filedlg
+upload: gwa_dist.zip
+	scp gwa_dist.zip $(SCP_HOST):
+	ssh $(SCP_HOST) unzip -o -d $(SCP_PATH) gwa_dist.zip
+	
 
 clean:
 ifdef WINDIR
