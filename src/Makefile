@@ -36,6 +36,13 @@ SCP_PATH=Sites/gmi/gwa_filedlg
 upload: gwa_dist.zip
 	scp gwa_dist.zip $(SCP_HOST):
 	ssh $(SCP_HOST) unzip -o -d $(SCP_PATH) gwa_dist.zip
+
+format:
+	fglcomp -M $(FGLFLAGS) --format --fo-inplace fglfiledlg.4gl
+	fglcomp -M $(FGLFLAGS) --format --fo-inplace testfiledlg.4gl
+
+doc:
+	fglcomp --build-doc fglfiledlg.4gl
 	
 
 clean:

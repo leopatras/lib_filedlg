@@ -2,13 +2,12 @@
 # (c) Copyright Four Js 1995, 2025. All Rights Reserved.
 # * Trademark of Four Js Development Tools Europe Ltd
 #   in the United States and elsewhere
-# 
+#
 # Four Js and its suppliers do not warrant or guarantee that these
 # samples are accurate and suitable for your purposes. Their inclusion is
 # purely for information purposes only.
 
---IMPORT FGL fglfiledlg
-IMPORT FGL fglfiledlg_mobile
+IMPORT FGL fglfiledlg
 
 MAIN
   DEFINE cname STRING
@@ -17,43 +16,39 @@ MAIN
 
   OPTIONS INPUT WRAP
 
-  DISPLAY "Try options in the action panel" AT 5,5
+  DISPLAY "Try options in the action panel" AT 5, 5
 
+  OPEN FORM f FROM "testfiledlg"
+  DISPLAY FORM f
 
-  open FORM f from "testfiledlg"
-  DISPLAY form f
+  MENU "" --got rid of the text here ##################################################
 
-  MENU ""  --got rid of the text here ##################################################
+    ON ACTION chooseper
+      -- get back an existing .per filename
+      LET r1.title = "Please choose a form"
+      LET r1.defaultfilename = "filedlg.per"
+      LET r1.types[1].description = "Form files (*.per)"
+      LET r1.types[1].suffixes = "*.per"
+      LET r1.types[2].description = "All files (*)"
+      LET r1.types[2].suffixes = "*"
+      LET r1.opt_delete_files = TRUE
+      LET cname = filedlg_open(r1.*)
+      MESSAGE ">>>>chosen file:", cname
 
-      ON ACTION chooseper
-          -- get back an existing .per filename
-          LET r1.title="Please choose a form"
-          LET r1.defaultfilename="filedlg.per"
-          LET r1.types[1].description="Form files (*.per)"
-          LET r1.types[1].suffixes="*.per"
-          LET r1.types[2].description="All files (*)"
-          LET r1.types[2].suffixes="*"
-          LET r1.opt_delete_files=TRUE
-          LET cname= filedlg_open(r1.*)
-          MESSAGE ">>>>chosen file:",cname
+    ON ACTION newper
+      -- get back a name for a file not existing yet
+      LET r2.title = "Please enter a filename for saving"
+      LET r2.defaultfilename = "spong"
+      LET r2.types[1].description = "All files (*.*)"
+      LET r2.types[1].suffixes = "*.*"
+      LET cname = filedlg_save(r2.*)
+      MESSAGE ">>>>new file:", cname
 
+    ON ACTION browsemobile
+      CALL fglfiledlg.browse()
 
-      ON ACTION newper
-          -- get back a name for a file not existing yet
-          LET r2.title="Please enter a filename for saving"
-          LET r2.defaultfilename="spong"
-          LET r2.types[1].description="All files (*.*)"
-          LET r2.types[1].suffixes="*.*"
-          LET cname= filedlg_save(r2.*)
-          MESSAGE ">>>>new file:",cname
-   
-
-     ON ACTION browsemobile
-          CALL fglfiledlg_mobile.browse()
-
-  
-     ON ACTION quitting 
-          EXIT MENU
+    ON ACTION quitting
+      EXIT MENU
 
   END MENU
 
