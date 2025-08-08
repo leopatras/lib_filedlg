@@ -69,7 +69,7 @@ END RECORD
 #+ @returnType void
 #+ @return None.
 #
-FUNCTION fill_tree()
+PRIVATE FUNCTION fill_tree()
   CALL tree_arr.clear()
   --expand root dir
   CALL expand_dirs(0)
@@ -200,8 +200,6 @@ PRIVATE FUNCTION hasChildDirs(dirpath)
 END FUNCTION
 
 #+ Opens a simple file browser window.
-#+ @returnType String
-#+ @return The result from the directory listing dialog, or NULL if canceled.
 #
 PUBLIC FUNCTION browse() ------------------keep
   DEFINE retstr STRING
@@ -221,7 +219,7 @@ END FUNCTION
 #+ @param title The dialog window title.
 #+ @param r The record containing file dialog configuration options.
 #
-FUNCTION _filedlg_doDlg(dlgtype, title, r)
+PRIVATE FUNCTION _filedlg_doDlg(dlgtype, title, r)
   DEFINE dlgtype STRING
   DEFINE title STRING
   DEFINE r FILEDLG_RECORD
@@ -377,7 +375,7 @@ END FUNCTION
 #+ @param dlg The dialog handler.
 #+ @param tree_idx The index of the selected tree node.
 #
-FUNCTION sync_list_with_tree(dlg, tree_idx)
+PRIVATE FUNCTION sync_list_with_tree(dlg, tree_idx)
   DEFINE dlg ui.Dialog
   DEFINE tree_idx INT
   DEFINE new_path STRING
@@ -396,7 +394,7 @@ END FUNCTION
 #+ @return None.
 #+ @param path The full directory path to highlight in the tree.
 #
-FUNCTION highlight_treenode(path)
+PRIVATE FUNCTION highlight_treenode(path)
   DEFINE path STRING --dir path to find and highlight
   DEFINE i INT --loop control var
   DEFINE dlg ui.Dialog
@@ -425,7 +423,7 @@ END FUNCTION
 #+ @return None
 #+ @param root_path The directory path to use as the root node.
 #
-FUNCTION refresh_tree_for_path(root_path)
+PRIVATE FUNCTION refresh_tree_for_path(root_path)
   DEFINE root_path STRING
   CALL tree_arr.clear()
 
@@ -449,7 +447,7 @@ END FUNCTION
 #+ @param typelist Array of accepted file extensions.
 #+ @param currfile The name of the file to highlight, if any.
 #
-FUNCTION _filedlg_fetch_filenames(d, currpath, typelist, currfile)
+PRIVATE FUNCTION _filedlg_fetch_filenames(d, currpath, typelist, currfile)
   DEFINE d ui.Dialog
   DEFINE currpath STRING
   DEFINE typelist STRING
@@ -484,7 +482,7 @@ END FUNCTION
 #+ @return None.
 #+ @param dirpath The directory to scan for files.
 #
-FUNCTION _filedlg_getfiles_int(dirpath)
+PRIVATE FUNCTION _filedlg_getfiles_int(dirpath)
   DEFINE dirpath STRING
   DEFINE dh, isdir INTEGER
   DEFINE fname, pname, size STRING
@@ -722,7 +720,8 @@ END FUNCTION
 #+ This function provides a full-featured, interactive file and directory browser,
 #+ allowing users to navigate directories, view files, delete files, create directories,
 #+ and perform other file management tasks within a dialog interface.
-#+ @returnType String #+ @return "back" if user navigated back or operation completed normally, "exit" if user chose to exit completely.
+#+ @returnType String
+#+ @return "back" if user navigated back or operation completed normally, "exit" if user chose to exit completely.
 #+ @param pwd The current working directory path to display.
 #+ @param prev The previous directory path (used for navigation context and highlighting).
 #
@@ -987,7 +986,7 @@ END FUNCTION
 #+ @return The complete file contents as a string, or NULL if file cannot be read.
 #+ @param fname The full path to the file to read.
 #
-FUNCTION string_from_file(fname)
+PRIVATE FUNCTION string_from_file(fname)
   DEFINE fname STRING
   DEFINE t TEXT
   DEFINE s STRING
