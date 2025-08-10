@@ -69,10 +69,10 @@ END RECORD
 #+ @returnType void
 #+ @return None.
 #
-PRIVATE FUNCTION fill_tree()
+PRIVATE FUNCTION fill_tree(dir STRING)
   CALL tree_arr.clear()
   --expand root dir
-  CALL expand_dirs(0)
+  CALL expand_dirs(0, dir)
 END FUNCTION
 
 #+ Expands the directory node at index p and inserts its child directories.
@@ -80,8 +80,9 @@ END FUNCTION
 #+ @return None.
 #+ @param p The index in the tree array to expand.
 #
-PRIVATE FUNCTION expand_dirs(p)
+PRIVATE FUNCTION expand_dirs(p, dir)
   DEFINE p INT --index of node in the tree array to expand
+  DEFINE dir STRING
   DEFINE parent_path STRING --parent path
   DEFINE dh INT --directory handle
   DEFINE fname, fullpath STRING
@@ -98,7 +99,7 @@ PRIVATE FUNCTION expand_dirs(p)
   END IF
 
   -- Determine which directory to scan
-  LET dh = os.Path.dirOpen(IIF(p == 0, ".", parent_path))
+  LET dh = os.Path.dirOpen(IIF(p == 0, dir, parent_path))
   IF dh == 0 THEN
     RETURN
   END IF
@@ -116,7 +117,7 @@ PRIVATE FUNCTION expand_dirs(p)
     END IF
 
     LET fullpath =
-        os.Path.join(IIF(p == 0, ".", parent_path), fname) --construct full path
+        os.Path.join(IIF(p == 0, dir, parent_path), fname) --construct full path
     LET isdir = os.Path.isDirectory(fullpath) --check if entry is a dir or not
     -- if not a directory then keep going!
     IF NOT isdir THEN
@@ -239,7 +240,6 @@ PRIVATE FUNCTION _filedlg_doDlg(dlgtype, title, r)
   CALL f.setElementText("accept", IIF(dlgtype == C_OPEN, "Open", "Save"))
 
   CALL fgl_settitle(title)
-  CALL fill_tree()
   LET currpath = r.defaultpath
   LET filename = r.defaultfilename
   DISPLAY BY NAME filename
@@ -247,6 +247,7 @@ PRIVATE FUNCTION _filedlg_doDlg(dlgtype, title, r)
   IF currpath = "." THEN
     LET currpath = os.Path.pwd()
   END IF
+  CALL fill_tree(currpath)
   DISPLAY currpath TO currpath
   LET cb = ui.ComboBox.forName("formonly.ftype")
   IF cb IS NULL THEN
@@ -283,7 +284,7 @@ PRIVATE FUNCTION _filedlg_doDlg(dlgtype, title, r)
 
     DISPLAY ARRAY tree_arr TO tr.*
       ON EXPAND(i)
-        CALL expand_dirs(i)
+        CALL expand_dirs(i, currpath)
       ON COLLAPSE(i)
         CALL collapse_dirs(i)
       BEFORE ROW
@@ -411,7 +412,7 @@ PRIVATE FUNCTION highlight_treenode(path)
 
       --if not expanded and has children, expand it
       IF NOT tree_arr[i].expanded AND tree_arr[i].hasChildren THEN
-        CALL expand_dirs(i)
+        CALL expand_dirs(i, currpath)
       END IF
       EXIT FOR
     END IF
@@ -435,7 +436,7 @@ PRIVATE FUNCTION refresh_tree_for_path(root_path)
   LET tree_arr[1].expanded = TRUE
   LET tree_arr[1].isdir = TRUE
   LET tree_arr[1].hasChildren = hasChildDirs(root_path)
-  CALL expand_dirs(1)
+  CALL expand_dirs(1, root_path)
 END FUNCTION
 
 #+ This function prepares the file dialog by filtering files by type, populating the file list,
