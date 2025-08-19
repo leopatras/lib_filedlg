@@ -70,6 +70,7 @@ END RECORD
 #+ @return None.
 #
 PRIVATE FUNCTION fill_tree(dir STRING)
+  --DISPLAY "fill_tree:",dir
   CALL tree_arr.clear()
   --expand root dir
   CALL expand_dirs(0, dir)
@@ -99,8 +100,10 @@ PRIVATE FUNCTION expand_dirs(p, dir)
   END IF
 
   -- Determine which directory to scan
-  LET dh = os.Path.dirOpen(IIF(p == 0, dir, parent_path))
+  VAR path=IIF(p == 0, dir, parent_path)
+  LET dh = os.Path.dirOpen(path)
   IF dh == 0 THEN
+    CALL fgl_winMessage("Info",sfmt("dirOpen path:%1 failed",path),"info")
     RETURN
   END IF
 
@@ -117,7 +120,8 @@ PRIVATE FUNCTION expand_dirs(p, dir)
     END IF
 
     LET fullpath =
-        os.Path.join(IIF(p == 0, dir, parent_path), fname) --construct full path
+        os.Path.join(path, fname) --construct full path
+    --DISPLAY "fullpath:",fullpath
     LET isdir = os.Path.isDirectory(fullpath) --check if entry is a dir or not
     -- if not a directory then keep going!
     IF NOT isdir THEN
@@ -229,7 +233,10 @@ PRIVATE FUNCTION _filedlg_doDlg(dlgtype, title, r)
   DEFINE doContinue, i INT
   DEFINE cb ui.ComboBox
   DEFINE curr_row INT
-
+  IF isMobile() THEN
+    CALL saveStyles()
+    CALL ui.Interface.loadStyles("fglfiledlg_mobile.4st")
+  END IF
   OPEN WINDOW _filedlg
       WITH
       FORM "fglfiledlg"
@@ -238,6 +245,19 @@ PRIVATE FUNCTION _filedlg_doDlg(dlgtype, title, r)
   VAR f = ui.Window.getCurrent().getForm()
 
   CALL f.setElementText("accept", IIF(dlgtype == C_OPEN, "Open", "Save"))
+  IF isMobile() THEN
+    --we did set rowActionTrigger to singleClick
+    --hence several elements make no sense anymore on screen
+    --accept is anyway triggered by the single click
+    CALL f.setElementHidden("accept", hidden: TRUE)
+    --filename is only updated after the single click so
+    --also this is useless
+    CALL f.setElementHidden("l_filename", hidden: TRUE)
+    CALL f.setElementHidden("formonly.filename", hidden: TRUE)
+    --we could leave cancel but on mobile going back should be done
+    --in the chrome bar (the hope for a GBC back button is still there)
+    CALL f.setElementHidden("cancel", hidden: TRUE)
+  END IF
 
   CALL fgl_settitle(title)
   LET currpath = r.defaultpath
@@ -367,6 +387,9 @@ PRIVATE FUNCTION _filedlg_doDlg(dlgtype, title, r)
 
   END DIALOG
   CLOSE WINDOW _filedlg
+  IF isMobile() THEN
+    CALL restoreStyles()
+  END IF
   RETURN filepath
 END FUNCTION
 
@@ -994,4 +1017,56 @@ PRIVATE FUNCTION string_from_file(fname)
   LOCATE t IN FILE fname
   LET s = t
   RETURN s
+END FUNCTION
+
+DEFINE _mobileCheck STRING
+PRIVATE FUNCTION isMobile() RETURNS BOOLEAN
+--use a string representation for the fact that the initial value is NULL
+  IF _mobileCheck IS NULL THEN
+    LET _mobileCheck = isMobileInt()
+  END IF
+  --gets converted to BOOLEN upon return
+  RETURN _mobileCheck
+END FUNCTION
+
+PRIVATE FUNCTION isMobileInt() RETURNS BOOLEAN
+  DEFINE ostype STRING
+  IF base.Application.isMobile() THEN
+    RETURN TRUE
+  END IF
+  TRY
+    CALL ui.Interface.frontCall("standard", "feinfo", ["ostype"], [ostype])
+    RETURN ostype == "IOS" OR ostype == "ANDROID"
+  CATCH
+  END TRY
+  RETURN FALSE
+END FUNCTION
+
+DEFINE _stylesStore STRING
+DEFINE _stylesStoreFName STRING
+--stores the current style tree
+PRIVATE FUNCTION saveStyles()
+  VAR root = ui.Interface.getRootNode()
+  VAR nlist = root.selectByTagName("StyleList")
+  IF nlist.getLength() > 0 THEN
+    VAR styleNode = nlist.item(1)
+    LET _stylesStore = SFMT("%1.4st", os.Path.makeTempName())
+    LET _stylesStoreFName = styleNode.getAttribute("fileName")
+    CALL styleNode.writeXml(path: _stylesStore)
+    --DISPLAY "wrote styleNode to:",_stylesStore
+  END IF
+END FUNCTION
+
+--..and restores it after leaving the dialog
+PRIVATE FUNCTION restoreStyles()
+  IF _stylesStore IS NOT NULL THEN
+    CALL ui.Interface.loadStyles(_stylesStore)
+    VAR root = ui.Interface.getRootNode()
+    VAR nlist = root.selectByTagName("StyleList")
+    VAR styleNode = nlist.item(1)
+    CALL styleNode.setAttribute("fileName", _stylesStoreFName)
+    CALL os.Path.delete(_stylesStore) RETURNING status
+    LET _stylesStore = NULL
+    LET _stylesStoreFName = NULL
+  END IF
 END FUNCTION

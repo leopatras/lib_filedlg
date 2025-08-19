@@ -24,7 +24,7 @@ LAYOUT(text="",style="dialog3", MINWIDTH = 50)
 
 HBOX (splitter)  
 TREE mytree (PARENTIDCOLUMN=parentid, IDCOLUMN=id,
-              EXPANDEDCOLUMN=expanded, ISNODECOLUMN=isdir, HIDDEN@SMALL, DOUBLECLICK = NONE)
+              EXPANDEDCOLUMN=expanded, ISNODECOLUMN=isdir, HIDDEN@SMALL,HIDDEN@MEDIUM,DOUBLECLICK = NONE)
 {
   Name                      
  [     name      ]
@@ -41,16 +41,16 @@ END
    HBOX  --(ORIENTATION@SMALL = VERTICAL)          --local hbox 1 start
     GRID
     {
-    [lfd]        
-    [path                  ][bu]
+    [ld1                      ]        
+    [ld2:path              :bu]
     }
    END -- END of grid
  END --local hbox 1 end
  
 HBOX --(ORIENTATION@SMALL = VERTICAL)
 --GRID
-TABLE t1 --table for this table below instead of grid
-(STRETCH = BOTH, FLIPPED@SMALL, HEIGHT = 15)
+TABLE t1
+(STRETCH = BOTH, FLIPPED@SMALL, HEIGHT = 15,DOUBLECLICK=accept)
 {
  
 [ei  |entry  |esize    |emodt   |etype ]
@@ -70,11 +70,11 @@ END
 HBOX  --(ORIENTATION@SMALL = VERTICAL)    --HBOX 2
 GRID
   {
-   [l                    ]
-   [f                    ]
-   [t                    ]
-   [e                    ]
-   [c        ] [o        ]
+   [l_filename           ]
+   [filename             ]
+   [l_files_of_type      ]
+   [lf2:ftype            ]
+   [cancel   ] [accept   ]
    }
 END --end grid 1
 END --END HBOX 2
@@ -94,24 +94,24 @@ PHANTOM FORMONLY.hasChildren;
  
  
  
-LABEL lfd:text="Directory:", SIZEPOLICY = DYNAMIC;
+LABEL ld1:text="Directory:",HIDDEN@MEDIUM,HIDDEN@LARGE;
+LABEL ld2:text="Directory:",HIDDEN@SMALL;
 path = FORMONLY.currpath,SCROLL,comment="Displays the current directory", STRETCH = X;
-BUTTON bu : move_up,image="uplevel",comment="Moves one directory up", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X, STRETCH@LARGE=NONE;
+BUTTON bu : move_up,image="uplevel",comment="Moves one directory up";
  
-IMAGE ei = FORMONLY.eimage, STRETCH = X, SIZEPOLICY = DYNAMIC, HIDDEN@SMALL;
+IMAGE ei = FORMONLY.eimage, STRETCH = NONE, SIZEPOLICY = DYNAMIC, HIDDEN@SMALL;
 entry = FORMONLY.entry, TITLE="Name", SIZEPOLICY = DYNAMIC, STRETCH = X;
-esize = FORMONLY.esize, TITLE="Size", JUSTIFY = RIGHT, SIZEPOLICY = DYNAMIC, STRETCH = X, HIDDEN@SMALL;
-emodt = FORMONLY.emodt, TITLE="Time", HIDDEN@SMALL, SIZEPOLICY = DYNAMIC, STRETCH = X, HIDDEN@SMALL;
-etype = FORMONLY.etype, TITLE="Type", STRETCH = X, HIDDEN@SMALL;
+esize = FORMONLY.esize, TITLE="Size", JUSTIFY = RIGHT, SIZEPOLICY = DYNAMIC, HIDDEN@SMALL;
+emodt = FORMONLY.emodt, TITLE="Time", HIDDEN@SMALL,HIDDEN@MEDIUM, SIZEPOLICY = DYNAMIC, STRETCH = X, HIDDEN@SMALL;
+etype = FORMONLY.etype,HIDDEN@SMALL,HIDDEN@MEDIUM, TITLE="Type", HIDDEN@SMALL;
  
-LABEL l:text="File:", SIZEPOLICY = DYNAMIC, STRETCH = X;
-LABEL t:text="Files of type:", SIZEPOLICY = DYNAMIC, STRETCH = X;
-f = FORMONLY.filename,SCROLL,COMMENT="Input the wanted file name", STRETCH = X, SIZEPOLICY = DYNAMIC;
-COMBOBOX e = FORMONLY.ftype,SCROLL,sizepolicy=DYNAMIC,NOT NULL, SIZEPOLICY = DYNAMIC;
--- BUTTON o:accept,text="Open", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X, STRETCH@LARGE=NONE;
--- BUTTON c:cancel,text="Cancel", SIZEPOLICY = DYNAMIC, STRETCH = X, STRETCH@SMALL=X, STRETCH@LARGE=NONE;
-BUTTON o:accept,text="Save", SIZEPOLICY = DYNAMIC, STRETCH@SMALL=X;
-BUTTON c:cancel,text="Cancel", SIZEPOLICY = DYNAMIC, STRETCH = X, STRETCH@SMALL=X;
+LABEL l_filename:l_filename,text="File:", SIZEPOLICY = DYNAMIC, STRETCH = X;
+filename = FORMONLY.filename,SCROLL,COMMENT="Input the wanted file name", STRETCH = X, SIZEPOLICY = DYNAMIC;
+LABEL l_files_of_type:l_files_of_type, text="Files of type:",HIDDEN@MEDIUM,HIDDEN@LARGE,STRETCH = X;
+LABEL lf2:lf2,TEXT="Files of type:",HIDDEN@SMALL;
+COMBOBOX ftype = FORMONLY.ftype,SCROLL,NOT NULL,STRETCH=X;
+BUTTON accept:accept,text="Save", STRETCH@SMALL=X;
+BUTTON cancel:cancel,text="Cancel", STRETCH = X, STRETCH@SMALL=X;
  
  
 END

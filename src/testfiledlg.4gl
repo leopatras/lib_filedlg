@@ -32,7 +32,7 @@ MAIN
       LET r1.types[2].description = "All files (*)"
       LET r1.types[2].suffixes = "*"
       LET r1.opt_delete_files = TRUE
-      LET r1.defaultpath=fgl_getenv("HOME")
+      --LET r1.defaultpath=os.Path.pwd()
       LET cname = filedlg_open(r1.*)
       MESSAGE ">>>>chosen file:", cname
 
